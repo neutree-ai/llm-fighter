@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./ui/public/logo.webp">
+  <img src="./ui/public/logo.webp" style="width: 96px; height: 96px">
 </div>
 
 # LLM Fighter
