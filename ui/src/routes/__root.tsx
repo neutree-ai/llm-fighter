@@ -59,7 +59,7 @@ function DesktopNavigation() {
       <NavigationMenuList>
         <NavigationMenuItem className="flex items-center">
           <img
-            src="/logo.png"
+            src="/logo.webp"
             alt="LLM Fighter Logo"
             className="h-8 w-8 inline-block mr-2"
           />
@@ -105,14 +105,14 @@ function MobileNavigation() {
                 />
               ))}
               <a
-                href="https://github.com"
+                href="https://github.com/neutree-ai/llm-fighter"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-lg py-2 text-foreground hover:text-primary transition-colors flex items-center"
                 onClick={handleClose}
               >
                 <img
-                  src="/github-mark-white.png"
+                  src="/github-mark-white.webp"
                   alt="GitHub Logo"
                   className="h-5 w-5 inline-block mr-2"
                 />
@@ -124,7 +124,7 @@ function MobileNavigation() {
         <div className="text-foreground">Menu</div>
       </div>
       <img
-        src="/logo.png"
+        src="/logo.webp"
         alt="LLM Fighter Logo"
         className="h-8 w-8 inline-block mr-2"
       />
@@ -141,12 +141,12 @@ export const Route = createRootRoute({
 
         <a
           className="hidden md:block cursor-pointer"
-          href="https://github.com"
+          href="https://github.com/neutree-ai/llm-fighter"
           target="_blank"
           rel="noopener noreferrer"
         >
           <img
-            src="/github-mark-white.png"
+            src="/github-mark-white.webp"
             alt="GitHub Logo"
             className="h-6 w-6 inline-block"
           />
@@ -164,7 +164,7 @@ export const Route = createRootRoute({
 
             <div className="flex items-center space-x-6">
               <a
-                href="https://github.com"
+                href="https://github.com/neutree-ai/llm-fighter"
                 className="text-muted-foreground hover:text-primary transition-colors font-fighter"
                 target="_blank"
                 rel="noopener noreferrer"

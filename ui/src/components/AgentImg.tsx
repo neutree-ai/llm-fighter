@@ -1,12 +1,12 @@
 import { cn } from "@/lib/utils";
 import { useMemo } from "react";
-import a0 from "../assets/a-0.png";
-import aClaude from "../assets/a-claude.png";
-import aKimi from "../assets/a-kimi.png";
-import aMistral from "../assets/a-mistral.png";
-import aGpt from "../assets/a-gpt.png";
-import aDeepseek from "../assets/a-deepseek.png";
-import aArcee from "../assets/a-arcee.png";
+import a0 from "../assets/a-0.webp";
+import aClaude from "../assets/a-claude.webp";
+import aKimi from "../assets/a-kimi.webp";
+import aMistral from "../assets/a-mistral.webp";
+import aGpt from "../assets/a-gpt.webp";
+import aDeepseek from "../assets/a-deepseek.webp";
+import aArcee from "../assets/a-arcee.webp";
 
 interface AgentImgProps {
   name: string;

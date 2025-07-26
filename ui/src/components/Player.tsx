@@ -8,8 +8,8 @@ import { cn } from "@/lib/utils";
 import SkillImg from "./SkillImg";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ReactMarkdown from "react-markdown";
-import tokenIcon from "../assets/token.png";
-import s0 from "../assets/s-0.png";
+import tokenIcon from "../assets/token.webp";
+import s0 from "../assets/s-0.webp";
 import { useMemo } from "react";
 
 interface PlayerProps {

@@ -22,7 +22,7 @@ function Index() {
       <header
         className={cn(
           "relative h-screen",
-          `before:absolute before:inset-0 before:bg-[url('/banner.png')] before:bg-cover before:bg-no-repeat before:bg-center before:opacity-100 before:-z-1`
+          `before:absolute before:inset-0 before:bg-[url('/banner.webp')] before:bg-cover before:bg-no-repeat before:bg-center before:opacity-100 before:-z-1`
         )}
       >
         <div className="absolute inset-0 bg-black/40 -z-10"></div>
@@ -50,7 +50,7 @@ function Index() {
 
         <div className="absolute bottom-20 right-8 md:right-16 z-10 flex items-center">
           <img
-            src="/logo.png"
+            src="/logo.webp"
             alt="LLM Fighter Logo"
             className="h-12 w-12 inline-block mr-2"
           />
@@ -73,7 +73,7 @@ function Index() {
                 <div className="w-16 h-1 bg-gray-600"></div>
               </div>
 
-              <div className="space-y-6">
+              <div className="space-y-6 auto-blur">
                 <div className="space-y-4 leading-relaxed">
                   <p>
                     Traditional benchmarks serve an important role in LLM
@@ -98,7 +98,7 @@ function Index() {
                 <div className="w-16 h-1 bg-primary"></div>
               </div>
 
-              <div className="space-y-6">
+              <div className="space-y-6 auto-blur">
                 <h4 className="text-xl font-semibold"></h4>
 
                 <div className="space-y-4 leading-relaxed">
@@ -113,7 +113,7 @@ function Index() {
                     className={cn(
                       glassCard,
                       "p-4",
-                      "before:bg-[url('/c-1.png')]"
+                      "before:bg-[url('/c-1.webp')]"
                     )}
                   >
                     <div className="relative z-10">
@@ -131,7 +131,7 @@ function Index() {
                     className={cn(
                       glassCard,
                       "p-4",
-                      "before:bg-[url('/c-2.png')]"
+                      "before:bg-[url('/c-2.webp')]"
                     )}
                   >
                     <div className="relative z-10">
@@ -149,7 +149,7 @@ function Index() {
                     className={cn(
                       glassCard,
                       "p-4",
-                      "before:bg-[url('/c-3.png')]"
+                      "before:bg-[url('/c-3.webp')]"
                     )}
                   >
                     <div className="relative z-10">
@@ -167,7 +167,7 @@ function Index() {
                     className={cn(
                       glassCard,
                       "p-4",
-                      "before:bg-[url('/c-4.png')]"
+                      "before:bg-[url('/c-4.webp')]"
                     )}
                   >
                     <div className="relative z-10">
@@ -194,9 +194,9 @@ function Index() {
             <div className="w-16 h-1 bg-primary mx-auto mb-6"></div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 auto-blur">
             <div
-              className={cn(glassCard, "p-8", "before:bg-[url('/who-1.png')]")}
+              className={cn(glassCard, "p-8", "before:bg-[url('/who-1.webp')]")}
             >
               <div className="relative z-10">
                 <h4 className="text-xl font-semibold mb-4 font-fighter text-white">
@@ -214,7 +214,7 @@ function Index() {
             </div>
 
             <div
-              className={cn(glassCard, "p-8", "before:bg-[url('/who-2.png')]")}
+              className={cn(glassCard, "p-8", "before:bg-[url('/who-2.webp')]")}
             >
               <div className="relative z-10">
                 <h4 className="text-xl font-semibold mb-4 font-fighter text-white">
@@ -237,7 +237,7 @@ function Index() {
       <section
         className={cn(
           "py-20 text-secondary-foreground relative",
-          `before:absolute before:inset-0 before:bg-[url('/background.png')] before:bg-cover before:bg-no-repeat before:bg-center before:opacity-100 before:-z-10`
+          `before:absolute before:inset-0 before:bg-[url('/background.webp')] before:bg-cover before:bg-no-repeat before:bg-center before:opacity-100 before:-z-10`
         )}
       >
         <div className="absolute inset-0 bg-black/50 -z-10"></div>

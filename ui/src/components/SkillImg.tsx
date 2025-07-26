@@ -4,13 +4,13 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import s1 from "../assets/s-1.png";
-import s2 from "../assets/s-2.png";
-import s3 from "../assets/s-3.png";
-import s4 from "../assets/s-4.png";
-import s5 from "../assets/s-5.png";
-import s6 from "../assets/s-6.png";
-import s0 from "../assets/s-0.png";
+import s1 from "../assets/s-1.webp";
+import s2 from "../assets/s-2.webp";
+import s3 from "../assets/s-3.webp";
+import s4 from "../assets/s-4.webp";
+import s5 from "../assets/s-5.webp";
+import s6 from "../assets/s-6.webp";
+import s0 from "../assets/s-0.webp";
 import { cn } from "@/lib/utils";
 
 const images = [s1, s2, s3, s4, s5, s6];

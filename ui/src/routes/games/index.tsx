@@ -48,7 +48,7 @@ function RouteComponent() {
               key={game.id}
               className={cn(
                 "group relative bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl py-4 px-2 hover:border-gray-600/50 transition-all duration-300 hover:transform hover:scale-[1.02] hover:shadow-2xl cursor-pointer overflow-hidden",
-                `before:absolute before:inset-0 before:bg-[url('/background.png')] before:bg-cover before:bg-center before:opacity-20 before:transition-opacity before:duration-500 hover:before:opacity-80 before:-z-1 before:blur-xl hover:before:blur-none`
+                `before:absolute before:inset-0 before:bg-[url('/background.webp')] before:bg-cover before:bg-center before:opacity-20 before:transition-opacity before:duration-500 hover:before:opacity-80 before:-z-1 before:blur-xl hover:before:blur-none`
               )}
               onClick={() => navigate({ to: `/games/${game.id}` })}
             >

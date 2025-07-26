@@ -41,4 +41,4 @@ Stay tuned for updates!
 
 ## Need more help?
 
-- 🐙 Report issues or contribute on [GitHub](https://github.com)
+- 🐙 Report issues or contribute on [GitHub](https://github.com/neutree-ai/llm-fighter)

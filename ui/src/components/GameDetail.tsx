@@ -195,7 +195,7 @@ export default function GameDetail({ gameResult }: GameDetailProps) {
     <div
       className={cn(
         "p-4 h-screen flex flex-col justify-between pt-[80px]",
-        `before:absolute before:inset-0 before:bg-[url('/background.png')] before:bg-cover before:bg-center before:opacity-100 before:-z-1`
+        `before:absolute before:inset-0 before:bg-[url('/background.webp')] before:bg-cover before:bg-center before:opacity-100 before:-z-1`
       )}
     >
       <header>
