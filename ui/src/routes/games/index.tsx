@@ -15,6 +15,10 @@ import { getGameConfigVersion, getPromptVersion } from "@/lib/game/config";
 import { getRoleState } from "@/lib/game/runner";
 import { useWhoami } from "@/lib/auth";
 import DoubleCheckDeleteButton from "@/components/DoubleCheckDeleteButton";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { useDebouncedValue } from "@/lib/use-debounced-value";
 
 export const Route = createFileRoute("/games/")({
   component: RouteComponent,
@@ -23,16 +27,18 @@ export const Route = createFileRoute("/games/")({
 function RouteComponent() {
   const navigate = useNavigate();
   const { data, isLoading: isAuthing } = useWhoami();
+  const [filters, setFilters] = useState<{ model: string }>({ model: "" });
+  const debouncedModel = useDebouncedValue(filters.model, 500);
 
   const {
     data: games,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["games"],
+    queryKey: ["games", debouncedModel],
     queryFn: () =>
       api.listGames(
-        { page: 0 },
+        { page: 0, model: debouncedModel },
         {
           userId: data?.user.userId ?? "",
         }
@@ -51,7 +57,17 @@ function RouteComponent() {
   return (
     <div className="bg-background min-h-screen p-4  pt-[80px]">
       <div className="container mx-auto">
-        <div className="flex justify-end">
+        <div className="flex justify-between">
+          <div className="filters flex gap-2">
+            <Label className="text-foreground whitespace-nowrap">
+              Filter By Model
+            </Label>
+            <Input
+              className="text-foreground"
+              value={filters.model}
+              onChange={(e) => setFilters({ model: e.target.value })}
+            />
+          </div>
           <Link to="/games/new" disabled={!data?.user.userId}>
             <Button variant="default" disabled={!data?.user.userId}>
               <Plus />

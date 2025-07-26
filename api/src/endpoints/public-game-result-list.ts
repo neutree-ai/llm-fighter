@@ -1,6 +1,6 @@
 import { OpenAPIRoute } from "chanfana";
 import { type AppContext, GameResult } from "../types";
-import { GameResultListSchema } from "./game-result-list";
+import { createSqlWhere, GameResultListSchema } from "./game-result-list";
 import { z } from "zod";
 
 export class PublicGameResultList extends OpenAPIRoute {
@@ -8,20 +8,17 @@ export class PublicGameResultList extends OpenAPIRoute {
 
   async handle(c: AppContext) {
     const data = await this.getValidatedData<typeof this.schema>();
-    const props = c.executionCtx.props;
 
-    const { page, isCompleted } = data.query;
+    const { page } = data.query;
 
     const params: any[] = [];
 
-    let where = "WHERE public = 1";
-
-    if (isCompleted === true) where += " AND winner IS NOT NULL";
-    if (isCompleted === false) where += " AND winner IS NULL";
+    const where = createSqlWhere("WHERE public = 1", data.query, params);
 
     const sql = `SELECT * FROM game_results ${where} ORDER BY created_at DESC LIMIT 50 OFFSET ?`;
 
     params.push(page * 50);
+
     const { results } = await c.env.DB.prepare(sql)
       .bind(...params)
       .all<z.infer<typeof GameResult>>();

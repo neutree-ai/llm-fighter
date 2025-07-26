@@ -1,4 +1,4 @@
-import { Bool, Num, OpenAPIRoute } from "chanfana";
+import { Bool, Num, OpenAPIRoute, Str } from "chanfana";
 import { z } from "zod";
 import { type AppContext, GameResult } from "../types";
 
@@ -23,6 +23,10 @@ export const GameResultListSchema = {
         description: "Filter by completed flag",
         required: false,
       }),
+      model: Str({
+        required: false,
+        description: "Filter by model",
+      }),
     }),
   },
   responses: {
@@ -44,6 +48,26 @@ export const GameResultListSchema = {
   },
 };
 
+export function createSqlWhere(
+  base: string,
+  { isCompleted, model }: z.infer<typeof GameResultListSchema.request.query>,
+  params: any[]
+) {
+  let where = base;
+
+  if (isCompleted === true) where += " AND winner IS NOT NULL";
+  if (isCompleted === false) where += " AND winner IS NULL";
+
+  if (model) {
+    where +=
+      " AND (p1Config ->> '$.model' LIKE ? OR p2Config ->> '$.model' LIKE ?)";
+
+    params.push(`%${model}%`, `%${model}%`);
+  }
+
+  return where;
+}
+
 export class GameResultList extends OpenAPIRoute {
   schema = GameResultListSchema;
 
@@ -51,14 +75,15 @@ export class GameResultList extends OpenAPIRoute {
     const data = await this.getValidatedData<typeof this.schema>();
     const props = c.executionCtx.props;
 
-    const { page, isCompleted } = data.query;
+    const { page } = data.query;
 
     const params: any[] = [props.userId];
 
-    let where = "WHERE (public = 1 OR owner_id = ?)";
-
-    if (isCompleted === true) where += " AND winner IS NOT NULL";
-    if (isCompleted === false) where += " AND winner IS NULL";
+    const where = createSqlWhere(
+      "WHERE (public = 1 OR owner_id = ?)",
+      data.query,
+      params
+    );
 
     const sql = `SELECT * FROM game_results ${where} ORDER BY created_at DESC LIMIT 50 OFFSET ?`;
 

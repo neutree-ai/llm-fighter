@@ -15,11 +15,18 @@ const getApiScope = (userId: string) => {
 
 export const api = {
   listGames(
-    { page }: { page: number },
+    { page, model }: { page: number; model?: string },
     { userId }: { userId: string }
   ): Promise<ApiGameState[]> {
+    const search = new URLSearchParams();
+    search.set("page", page.toString());
+    search.set("isCompleted", "true");
+    if (model) {
+      search.set("model", model);
+    }
+
     return apiFetch(
-      `/api/${getApiScope(userId)}/game-results?page=${page}&isCompleted=true`
+      `/api/${getApiScope(userId)}/game-results?${search.toString()}`
     ).then((response) => response.json().then((data) => data.gameResults));
   },
   getGame(

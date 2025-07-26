@@ -48,6 +48,9 @@ export class LLMAgent {
     this.model = createOpenAI({
       baseURL: this.config.baseURL,
       apiKey: this.config.apiKey,
+      headers: {
+        "X-Title": "LLM Fighter",
+      },
     })(this.config.model);
   }
 
