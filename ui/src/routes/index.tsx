@@ -64,7 +64,7 @@ function Index() {
 
       <section className="py-20 bg-background text-secondary-foreground">
         <div className="container mx-auto px-8 md:px-16">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             <div className="space-y-8">
               <div className="space-y-4">
                 <h3 className="text-3xl font-fighter-heavy">
@@ -139,7 +139,7 @@ function Index() {
                         Tool Mastery
                       </h5>
                       <p className="text-gray-300 text-sm">
-                        Precise tool selection and invocation with customizable.
+                        Precise tool selection and invocation with customizable
                         skill sets.
                       </p>
                     </div>

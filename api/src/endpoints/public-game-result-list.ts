@@ -32,6 +32,7 @@ export class PublicGameResultList extends OpenAPIRoute {
         p2Config: JSON.parse(result.p2Config),
         gameConfig: JSON.parse(result.gameConfig),
         created_at: result.created_at,
+        public: result.public,
       })),
     };
   }

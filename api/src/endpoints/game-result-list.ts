@@ -10,6 +10,7 @@ const GameResultListItem = GameResult.pick({
   gameConfig: true,
   created_at: true,
   owner_id: true,
+  public: true,
 });
 
 export const GameResultListSchema = {
@@ -102,6 +103,7 @@ export class GameResultList extends OpenAPIRoute {
         gameConfig: JSON.parse(result.gameConfig),
         created_at: result.created_at,
         owner_id: result.owner_id,
+        public: result.public,
       })),
     };
   }

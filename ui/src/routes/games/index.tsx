@@ -57,19 +57,28 @@ function RouteComponent() {
   return (
     <div className="bg-background min-h-screen p-4  pt-[80px]">
       <div className="container mx-auto">
-        <div className="flex justify-between">
-          <div className="filters flex gap-2">
+        <div className="flex flex-col sm:flex-row justify-between gap-4 sm:gap-0">
+          <div className="filters flex flex-col sm:flex-row gap-2 sm:items-center flex-1">
             <Label className="text-foreground whitespace-nowrap">
               Filter By Model
             </Label>
             <Input
-              className="text-foreground"
+              className="text-foreground sm:max-w-xs"
               value={filters.model}
               onChange={(e) => setFilters({ model: e.target.value })}
+              placeholder="Type to filter..."
             />
           </div>
-          <Link to="/games/new" disabled={!data?.user.userId}>
-            <Button variant="default" disabled={!data?.user.userId}>
+          <Link
+            to="/games/new"
+            disabled={!data?.user.userId}
+            className="w-full sm:w-auto"
+          >
+            <Button
+              variant="default"
+              disabled={!data?.user.userId}
+              className="w-full sm:w-auto"
+            >
               <Plus />
               New
             </Button>
@@ -140,16 +149,19 @@ function RouteComponent() {
               </div>
 
               <div className="tags my-4 space-x-2">
-                <Badge variant="outline">
+                <Badge variant="secondary">
                   game config: {getGameConfigVersion(game.gameConfig)}
                 </Badge>
-                <Badge variant="outline">
+                <Badge variant="secondary">
                   p1 prompt:{" "}
                   {getPromptVersion(game.p1Config.systemPrompt ?? "")}
                 </Badge>
-                <Badge variant="outline">
+                <Badge variant="secondary">
                   p2 prompt:{" "}
                   {getPromptVersion(game.p2Config.systemPrompt ?? "")}
+                </Badge>
+                <Badge variant="secondary">
+                  {game.public ? "public" : "private"}
                 </Badge>
               </div>
 
