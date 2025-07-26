@@ -16,6 +16,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
+import UserButton from "@/components/UserButton";
 
 const menuItems = [
   { to: "/", label: "Home" },
@@ -72,6 +73,21 @@ function DesktopNavigation() {
             </NavigationMenuLink>
           </NavigationMenuItem>
         ))}
+
+        <NavigationMenuItem>
+          <a
+            className="cursor-pointer mb-1 ml-2 flex"
+            href="https://github.com/neutree-ai/llm-fighter"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src="/github-mark-white.webp"
+              alt="GitHub Logo"
+              className="h-5 w-5"
+            />
+          </a>
+        </NavigationMenuItem>
 
         <NavigationMenuIndicator />
       </NavigationMenuList>
@@ -139,18 +155,9 @@ export const Route = createRootRoute({
         <DesktopNavigation />
         <MobileNavigation />
 
-        <a
-          className="hidden md:block cursor-pointer"
-          href="https://github.com/neutree-ai/llm-fighter"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img
-            src="/github-mark-white.webp"
-            alt="GitHub Logo"
-            className="h-6 w-6 inline-block"
-          />
-        </a>
+        <div className="flex items-center">
+          <UserButton />
+        </div>
       </div>
 
       <Outlet />
@@ -175,6 +182,11 @@ export const Route = createRootRoute({
           </div>
         </div>
       </footer>
+    </div>
+  ),
+  notFoundComponent: () => (
+    <div className="flex items-center justify-center h-screen text-foreground bg-background">
+      <h1 className="text-4xl font-bold">404 - Not Found</h1>
     </div>
   ),
 });

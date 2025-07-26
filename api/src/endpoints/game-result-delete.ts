@@ -34,13 +34,19 @@ export class GameResultDelete extends OpenAPIRoute {
 
   async handle(c: AppContext) {
     const data = await this.getValidatedData<typeof this.schema>();
+    const props = c.executionCtx.props;
+    if (!props?.userId)
+      return Response.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
 
     const { id } = data.params;
 
     const { results } = await c.env.DB.prepare(
-      `DELETE FROM game_results WHERE id = ?`
+      `DELETE FROM game_results WHERE id = ? AND owner_id = ? RETURNING id`
     )
-      .bind(id)
+      .bind(id, props.userId)
       .all<z.infer<typeof GameResultDeleteItem>>();
 
     return {

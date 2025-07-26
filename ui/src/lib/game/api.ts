@@ -1,29 +1,44 @@
+import { apiFetch } from "../auth";
 import type { GameResult } from "./runner";
 import { QueryClient } from "@tanstack/react-query";
 
 type ApiGameState = {
   id: string;
   created_at: string;
+  public: boolean | null;
+  owner_id: string | null;
 } & GameResult;
 
+const getApiScope = (userId: string) => {
+  return userId ? "private" : "public";
+};
+
 export const api = {
-  listGames({ page }: { page: number }): Promise<ApiGameState[]> {
-    return fetch(`/api/game-results?page=${page}&isCompleted=true`).then(
-      (response) => response.json().then((data) => data.gameResults)
+  listGames(
+    { page }: { page: number },
+    { userId }: { userId: string }
+  ): Promise<ApiGameState[]> {
+    return apiFetch(
+      `/api/${getApiScope(userId)}/game-results?page=${page}&isCompleted=true`
+    ).then((response) => response.json().then((data) => data.gameResults));
+  },
+  getGame(
+    gameId: string,
+    { userId }: { userId: string }
+  ): Promise<ApiGameState | undefined> {
+    return apiFetch(`/api/${getApiScope(userId)}/game-results/${gameId}`).then(
+      (response) => {
+        if (response.ok) {
+          return response.json().then((data) => data.gameResult);
+        }
+        return undefined;
+      }
     );
   },
-  getGame(gameId: string): Promise<ApiGameState | undefined> {
-    return fetch(`/api/game-results/${gameId}`).then((response) => {
-      if (response.ok) {
-        return response.json().then((data) => data.gameResult);
-      }
-      return undefined;
-    });
-  },
   createGame(
-    game: Omit<ApiGameState, "id" | "created_at">
+    game: Omit<ApiGameState, "id" | "created_at" | "owner_id">
   ): Promise<{ id: string }> {
-    return fetch("/api/game-results", {
+    return apiFetch("/api/private/game-results", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -36,6 +51,7 @@ export const api = {
         tokenLogs: JSON.stringify(game.tokenLogs),
         p1Config: JSON.stringify(game.p1Config),
         p2Config: JSON.stringify(game.p2Config),
+        public: game.public,
       }),
     }).then((response) => {
       if (response.ok) {
@@ -44,8 +60,11 @@ export const api = {
       throw new Error("Failed to create game");
     });
   },
-  updateGame(gameId: string, result: GameResult): Promise<{ id: string }> {
-    return fetch(`/api/game-results/${gameId}`, {
+  updateGame(
+    gameId: string,
+    result: Omit<ApiGameState, "id" | "created_at" | "owner_id">
+  ): Promise<{ id: string }> {
+    return apiFetch(`/api/private/game-results/${gameId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -58,6 +77,7 @@ export const api = {
         tokenLogs: JSON.stringify(result.tokenLogs),
         p1Config: JSON.stringify(result.p1Config),
         p2Config: JSON.stringify(result.p2Config),
+        public: result.public,
       }),
     }).then((response) => {
       if (response.ok) {
@@ -67,13 +87,27 @@ export const api = {
     });
   },
   deleteGame(gameId: string): Promise<{ id: string }> {
-    return fetch(`/api/game-results/${gameId}`, {
+    return apiFetch(`/api/private/game-results/${gameId}`, {
       method: "DELETE",
     }).then((response) => {
       if (response.ok) {
         return response.json().then((data) => data.gameResult);
       }
       throw new Error("Failed to delete game");
+    });
+  },
+  whoami(): Promise<{
+    user: { userId: string; login: string; avatarUrl: string };
+  }> {
+    return apiFetch("/api/private/whoami").then((response) => {
+      if (response.ok) {
+        return response.json().then((data) => {
+          return {
+            user: data.props,
+          };
+        });
+      }
+      throw new Error("Failed to fetch user information");
     });
   },
 };

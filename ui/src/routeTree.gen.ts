@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as GamesIndexRouteImport } from './routes/games/index'
+import { Route as OauthCallbackRouteImport } from './routes/oauth/callback'
 import { Route as GamesNewRouteImport } from './routes/games/new'
 import { Route as GamesGameIdRouteImport } from './routes/games/$gameId'
 import { Route as DocsFaqRouteImport } from './routes/docs/faq'
@@ -24,6 +25,11 @@ const IndexRoute = IndexRouteImport.update({
 const GamesIndexRoute = GamesIndexRouteImport.update({
   id: '/games/',
   path: '/games/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OauthCallbackRoute = OauthCallbackRouteImport.update({
+  id: '/oauth/callback',
+  path: '/oauth/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GamesNewRoute = GamesNewRouteImport.update({
@@ -53,6 +59,7 @@ export interface FileRoutesByFullPath {
   '/docs/faq': typeof DocsFaqRoute
   '/games/$gameId': typeof GamesGameIdRoute
   '/games/new': typeof GamesNewRoute
+  '/oauth/callback': typeof OauthCallbackRoute
   '/games': typeof GamesIndexRoute
 }
 export interface FileRoutesByTo {
@@ -61,6 +68,7 @@ export interface FileRoutesByTo {
   '/docs/faq': typeof DocsFaqRoute
   '/games/$gameId': typeof GamesGameIdRoute
   '/games/new': typeof GamesNewRoute
+  '/oauth/callback': typeof OauthCallbackRoute
   '/games': typeof GamesIndexRoute
 }
 export interface FileRoutesById {
@@ -70,6 +78,7 @@ export interface FileRoutesById {
   '/docs/faq': typeof DocsFaqRoute
   '/games/$gameId': typeof GamesGameIdRoute
   '/games/new': typeof GamesNewRoute
+  '/oauth/callback': typeof OauthCallbackRoute
   '/games/': typeof GamesIndexRoute
 }
 export interface FileRouteTypes {
@@ -80,6 +89,7 @@ export interface FileRouteTypes {
     | '/docs/faq'
     | '/games/$gameId'
     | '/games/new'
+    | '/oauth/callback'
     | '/games'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -88,6 +98,7 @@ export interface FileRouteTypes {
     | '/docs/faq'
     | '/games/$gameId'
     | '/games/new'
+    | '/oauth/callback'
     | '/games'
   id:
     | '__root__'
@@ -96,6 +107,7 @@ export interface FileRouteTypes {
     | '/docs/faq'
     | '/games/$gameId'
     | '/games/new'
+    | '/oauth/callback'
     | '/games/'
   fileRoutesById: FileRoutesById
 }
@@ -105,6 +117,7 @@ export interface RootRouteChildren {
   DocsFaqRoute: typeof DocsFaqRoute
   GamesGameIdRoute: typeof GamesGameIdRoute
   GamesNewRoute: typeof GamesNewRoute
+  OauthCallbackRoute: typeof OauthCallbackRoute
   GamesIndexRoute: typeof GamesIndexRoute
 }
 
@@ -122,6 +135,13 @@ declare module '@tanstack/react-router' {
       path: '/games'
       fullPath: '/games'
       preLoaderRoute: typeof GamesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/oauth/callback': {
+      id: '/oauth/callback'
+      path: '/oauth/callback'
+      fullPath: '/oauth/callback'
+      preLoaderRoute: typeof OauthCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/games/new': {
@@ -161,6 +181,7 @@ const rootRouteChildren: RootRouteChildren = {
   DocsFaqRoute: DocsFaqRoute,
   GamesGameIdRoute: GamesGameIdRoute,
   GamesNewRoute: GamesNewRoute,
+  OauthCallbackRoute: OauthCallbackRoute,
   GamesIndexRoute: GamesIndexRoute,
 }
 export const routeTree = rootRouteImport

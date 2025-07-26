@@ -6,6 +6,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/lib/game/api";
 
 import "./index.css";
+import { ApiKeyStoreProvider } from "./lib/api-key-manager";
 
 const router = createRouter({ routeTree });
 
@@ -18,7 +19,9 @@ declare module "@tanstack/react-router" {
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <ApiKeyStoreProvider>
+        <RouterProvider router={router} />
+      </ApiKeyStoreProvider>
     </QueryClientProvider>
   </StrictMode>
 );

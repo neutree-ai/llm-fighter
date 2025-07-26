@@ -1,4 +1,4 @@
-import { DateTime, Str, Enumeration } from "chanfana";
+import { DateTime, Str, Bool } from "chanfana";
 import type { Context } from "hono";
 import { z } from "zod";
 
@@ -13,6 +13,8 @@ export const GameResult = z.object({
   tokenLogs: Str(),
   p1Config: Str(),
   p2Config: Str(),
+  public: Bool(),
+  owner_id: Str().optional(),
   created_at: DateTime({
     default: true,
   }),

@@ -4,7 +4,7 @@
  */
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "api",
+  "name": "llm-fighter",
   "main": "src/index.ts",
   "compatibility_date": "2025-07-23",
   "observability": {
@@ -37,7 +37,12 @@
    * Static Assets
    * https://developers.cloudflare.com/workers/static-assets/binding/
    */
-  // "assets": { "directory": "./public/", "binding": "ASSETS" },
+  "assets": {
+    "directory": "../ui/dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*", "/auth/*"]
+  },
 
   /**
    * Service Bindings (communicate between multiple Workers)
@@ -51,5 +56,22 @@
       "database_name": "api_db",
       "database_id": "ca59d7e3-5107-49d1-9c44-16092a2034d0"
     }
-  ]
+  ],
+
+  "kv_namespaces": [
+    {
+      "binding": "OAUTH_KV",
+      "id": "69a9f46cca2f44bebaad46d8d70b5fef",
+      "preview_id": "f7fcebe228a743f891579dd5a76c80d8"
+    },
+    {
+      "binding": "SESSIONS_KV",
+      "id": "0f4fee7fee83424b95b318f470d059ba",
+      "preview_id": "3ba6be8a0b344280aba8193754462eae"
+    }
+  ],
+  "vars": {
+    "GITHUB_CLIENT_ID": "Ov23liXsypfIrQriDVIS",
+    "GITHUB_REDIRECT_URI": "https://llm-fighter.koala-club.workers.dev/auth/github/callback"
+  }
 }

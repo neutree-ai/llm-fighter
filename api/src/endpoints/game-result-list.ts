@@ -9,59 +9,63 @@ const GameResultListItem = GameResult.pick({
   p2Config: true,
   gameConfig: true,
   created_at: true,
+  owner_id: true,
 });
 
-export class GameResultList extends OpenAPIRoute {
-  schema = {
-    request: {
-      query: z.object({
-        page: Num({
-          description: "Page number",
-          default: 0,
-        }),
-        isCompleted: Bool({
-          description: "Filter by completed flag",
-          required: false,
-        }),
+export const GameResultListSchema = {
+  request: {
+    query: z.object({
+      page: Num({
+        description: "Page number",
+        default: 0,
       }),
-    },
-    responses: {
-      "200": {
-        description: "Returns a list of game results",
-        content: {
-          "application/json": {
-            schema: z.object({
-              series: z.object({
-                success: Bool(),
-                result: z.object({
-                  gameResults: GameResultListItem.array(),
-                }),
+      isCompleted: Bool({
+        description: "Filter by completed flag",
+        required: false,
+      }),
+    }),
+  },
+  responses: {
+    "200": {
+      description: "Returns a list of game results",
+      content: {
+        "application/json": {
+          schema: z.object({
+            series: z.object({
+              success: Bool(),
+              result: z.object({
+                gameResults: GameResultListItem.array(),
               }),
             }),
-          },
+          }),
         },
       },
     },
-  };
+  },
+};
+
+export class GameResultList extends OpenAPIRoute {
+  schema = GameResultListSchema;
 
   async handle(c: AppContext) {
     const data = await this.getValidatedData<typeof this.schema>();
+    const props = c.executionCtx.props;
 
     const { page, isCompleted } = data.query;
 
-    let query: string;
-    let stmt: D1PreparedStatement;
-    if (isCompleted === undefined) {
-      query = `SELECT * FROM game_results ORDER BY created_at DESC LIMIT 50 OFFSET ?`;
-      stmt = c.env.DB.prepare(query).bind(page * 50);
-    } else if (isCompleted) {
-      query = `SELECT * FROM game_results WHERE winner IS NOT NULL ORDER BY created_at DESC LIMIT 50 OFFSET ?`;
-      stmt = c.env.DB.prepare(query).bind(page * 50);
-    } else {
-      query = `SELECT * FROM game_results WHERE winner IS NULL ORDER BY created_at DESC LIMIT 50 OFFSET ?`;
-      stmt = c.env.DB.prepare(query).bind(page * 50);
-    }
-    const { results } = await stmt.all<z.infer<typeof GameResultListItem>>();
+    const params: any[] = [props.userId];
+
+    let where = "WHERE (public = 1 OR owner_id = ?)";
+
+    if (isCompleted === true) where += " AND winner IS NOT NULL";
+    if (isCompleted === false) where += " AND winner IS NULL";
+
+    const sql = `SELECT * FROM game_results ${where} ORDER BY created_at DESC LIMIT 50 OFFSET ?`;
+
+    params.push(page * 50);
+    const { results } = await c.env.DB.prepare(sql)
+      .bind(...params)
+      .all<z.infer<typeof GameResult>>();
 
     return {
       success: true,
@@ -72,6 +76,7 @@ export class GameResultList extends OpenAPIRoute {
         p2Config: JSON.parse(result.p2Config),
         gameConfig: JSON.parse(result.gameConfig),
         created_at: result.created_at,
+        owner_id: result.owner_id,
       })),
     };
   }

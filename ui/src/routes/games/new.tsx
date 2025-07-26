@@ -19,6 +19,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "@/lib/game/api";
 import { v1Config } from "@/lib/game/config";
+import { useApiKeyStore } from "@/lib/api-key-manager";
 
 export const Route = createFileRoute("/games/new")({
   component: RouteComponent,
@@ -179,9 +180,17 @@ function RouteComponent() {
   });
 
   const navigate = useNavigate();
+  const { setApiKeys } = useApiKeyStore();
+
   const { mutate, isPending } = useMutation({
     mutationKey: ["games"],
     mutationFn: async (values: FormData) => {
+      // keep API keys in the client-side
+      const p1Key = values.p1.apiKey;
+      const p2Key = values.p2.apiKey;
+      values.p1.apiKey = "*";
+      values.p2.apiKey = "*";
+
       const game = await api.createGame({
         gameConfig: v1Config.gameConfig,
         p1Config: values.p1,
@@ -190,7 +199,14 @@ function RouteComponent() {
         logs: [],
         violationLogs: [],
         tokenLogs: [],
+        public: true,
       });
+
+      setApiKeys(game.id, {
+        p1Key,
+        p2Key,
+      });
+
       navigate({ to: `/games/${game.id}` });
     },
   });

@@ -3,6 +3,7 @@ import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
+import { ProxyAgent } from "proxy-agent";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -20,10 +21,12 @@ export default defineConfig({
     },
   },
   server: {
+    host: "0.0.0.0",
     proxy: {
       "/api": {
-        target: "http://localhost:8787",
+        target: "https://llm-fighter.koala-club.workers.dev",
         changeOrigin: true,
+        agent: new ProxyAgent(),
       },
     },
   },

@@ -44,6 +44,7 @@ export class GameResultUpdate extends OpenAPIRoute {
 
   async handle(c: AppContext) {
     const data = await this.getValidatedData<typeof this.schema>();
+    const props = c.executionCtx.props;
 
     const { id } = data.params;
     const gameResultToUpdate = data.body;
@@ -56,8 +57,9 @@ export class GameResultUpdate extends OpenAPIRoute {
         violationLogs = ?,
         tokenLogs = ?,
         p1Config = ?,
-        p2Config = ?
-      WHERE id = ?
+        p2Config = ?,
+        public = ?
+      WHERE id = ? AND owner_id = ?
       RETURNING id`
     )
       .bind(
@@ -68,7 +70,9 @@ export class GameResultUpdate extends OpenAPIRoute {
         gameResultToUpdate.tokenLogs,
         gameResultToUpdate.p1Config,
         gameResultToUpdate.p2Config,
-        id
+        gameResultToUpdate.public ? 1 : 0,
+        id,
+        props.userId
       )
       .first();
 

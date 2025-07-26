@@ -2,54 +2,57 @@ import { Bool, OpenAPIRoute, Str } from "chanfana";
 import { z } from "zod";
 import { type AppContext, GameResult } from "../types";
 
+export const GameResultFetchSchema = {
+  request: {
+    params: z.object({
+      id: Str(),
+    }),
+  },
+  responses: {
+    "200": {
+      description: "Returns a single game result if found",
+      content: {
+        "application/json": {
+          schema: z.object({
+            series: z.object({
+              success: Bool(),
+              result: z.object({
+                gameResult: GameResult,
+              }),
+            }),
+          }),
+        },
+      },
+    },
+    "404": {
+      description: "Game result not found",
+      content: {
+        "application/json": {
+          schema: z.object({
+            series: z.object({
+              success: Bool(),
+              error: Str(),
+            }),
+          }),
+        },
+      },
+    },
+  },
+};
+
 export class GameResultFetch extends OpenAPIRoute {
-  schema = {
-    request: {
-      params: z.object({
-        id: Str(),
-      }),
-    },
-    responses: {
-      "200": {
-        description: "Returns a single game result if found",
-        content: {
-          "application/json": {
-            schema: z.object({
-              series: z.object({
-                success: Bool(),
-                result: z.object({
-                  gameResult: GameResult,
-                }),
-              }),
-            }),
-          },
-        },
-      },
-      "404": {
-        description: "Game result not found",
-        content: {
-          "application/json": {
-            schema: z.object({
-              series: z.object({
-                success: Bool(),
-                error: Str(),
-              }),
-            }),
-          },
-        },
-      },
-    },
-  };
+  schema = GameResultFetchSchema;
 
   async handle(c: AppContext) {
     const data = await this.getValidatedData<typeof this.schema>();
+    const props = c.executionCtx.props;
 
     const { id } = data.params;
 
     const { results } = await c.env.DB.prepare(
-      `SELECT * FROM game_results WHERE id = ?`
+      `SELECT * FROM game_results WHERE id = ? AND (public = 1 OR owner_id = ?)`
     )
-      .bind(id)
+      .bind(id, props.userId)
       .all<z.infer<typeof GameResult>>();
 
     if (results.length === 0) {
@@ -76,6 +79,7 @@ export class GameResultFetch extends OpenAPIRoute {
         p1Config: JSON.parse(results[0].p1Config),
         p2Config: JSON.parse(results[0].p2Config),
         created_at: results[0].created_at,
+        owner_id: results[0].owner_id,
       },
     };
   }

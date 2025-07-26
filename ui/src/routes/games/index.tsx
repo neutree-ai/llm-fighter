@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { api, queryClient } from "@/lib/game/api";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Calendar, Plus } from "lucide-react";
-import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import { Calendar, Loader2, Plus } from "lucide-react";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
 import PlayerCard from "@/components/PlayerCard";
 import {
@@ -13,37 +13,71 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { getGameConfigVersion, getPromptVersion } from "@/lib/game/config";
 import { getRoleState } from "@/lib/game/runner";
-
-const gamesQueryOptions = queryOptions({
-  queryKey: ["games"],
-  queryFn: () => api.listGames({ page: 0 }),
-});
+import { useWhoami } from "@/lib/auth";
+import DoubleCheckDeleteButton from "@/components/DoubleCheckDeleteButton";
 
 export const Route = createFileRoute("/games/")({
-  loader: async () => {
-    return queryClient.ensureQueryData(gamesQueryOptions);
-  },
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { data: games } = useSuspenseQuery(gamesQueryOptions);
   const navigate = useNavigate();
+  const { data, isLoading: isAuthing } = useWhoami();
+
+  const {
+    data: games,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["games"],
+    queryFn: () =>
+      api.listGames(
+        { page: 0 },
+        {
+          userId: data?.user.userId ?? "",
+        }
+      ),
+    enabled: !isAuthing,
+  });
+
+  const { mutateAsync: deleteGame, isPending: isDeleting } = useMutation({
+    mutationKey: ["deleteGame", "games"],
+    mutationFn: (gameId: string) => api.deleteGame(gameId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["games"] });
+    },
+  });
 
   return (
     <div className="bg-background min-h-screen p-4  pt-[80px]">
       <div className="container mx-auto">
         <div className="flex justify-end">
-          <Link to="/games/new">
-            <Button variant="default">
+          <Link to="/games/new" disabled={!data?.user.userId}>
+            <Button variant="default" disabled={!data?.user.userId}>
               <Plus />
               New
             </Button>
           </Link>
         </div>
 
+        {isLoading && (
+          <Loader2 className="w-8 h-8 animate-spin text-foreground mx-auto mt-10" />
+        )}
+
+        {error && (
+          <div className="text-red-500 text-center mt-4">
+            <p>Error loading games: {error.message}</p>
+          </div>
+        )}
+
+        {!isLoading && !error && games?.length === 0 && (
+          <div className="text-gray-500 text-center mt-10">
+            No games found. Start by creating a new game.
+          </div>
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
-          {games.map((game) => (
+          {(games || []).map((game) => (
             <div
               key={game.id}
               className={cn(
@@ -103,9 +137,19 @@ function RouteComponent() {
                 </Badge>
               </div>
 
-              <div className="flex items-center text-gray-400 text-sm leading-relaxed line-clamp-3">
-                <Calendar className="mr-2 w-3" />
-                {new Date(game.created_at).toLocaleString()}
+              <div className="flex items-center text-foreground text-sm leading-relaxed line-clamp-3 justify-between">
+                <div className="flex items-center py-1">
+                  <Calendar className="mr-2 w-3" />
+                  {new Date(game.created_at).toLocaleString()}
+                </div>
+
+                {data?.user.userId && game.owner_id === data.user.userId && (
+                  <DoubleCheckDeleteButton
+                    className="hidden group-hover:block cursor-pointer z-10"
+                    onDelete={() => deleteGame(game.id)}
+                    disabled={isDeleting}
+                  />
+                )}
               </div>
 
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/0 to-purple-500/0 group-hover:from-blue-500/5 group-hover:to-purple-500/5 transition-all duration-300 pointer-events-none" />
