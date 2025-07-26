@@ -216,7 +216,7 @@ function RouteComponent() {
   }
 
   return (
-    <div className="bg-background pt-[80px]">
+    <div className="bg-background pt-[80px] min-h-screen">
       <div className="container mx-auto px-4 max-w-4xl">
         <div className="mb-8">
           <blockquote className="pl-4 border-l-4 border-primary bg-muted/50 p-4 rounded-r-md text-foreground">

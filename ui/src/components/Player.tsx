@@ -42,6 +42,8 @@ const Player = ({
       return r === role && parseInt(t, 10) <= current.turn;
     }).length;
   }, [violationRecord, role, current.turn]);
+  const violationTurn =
+    current.player !== role && role === "p2" ? current.turn - 1 : current.turn;
 
   return (
     <div
@@ -61,7 +63,7 @@ const Player = ({
               <SkillImg
                 skillName={log.result.skillUsed}
                 className="inline"
-                violationLog={violationRecord[`${role}-${current.turn}`]}
+                violationLog={violationRecord[`${role}-${violationTurn}`]}
               />
             ) : (
               <span className="text-muted-foreground">No action</span>

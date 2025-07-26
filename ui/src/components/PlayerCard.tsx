@@ -69,7 +69,11 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
         {/* Player info */}
         {(playerName || model) && (
           <div className="player-card__info">
-            {playerName && <h3 className="player-card__name">{playerName}</h3>}
+            {playerName && (
+              <h3 className="player-card__name text-shadow-lg/50">
+                {playerName}
+              </h3>
+            )}
             {model && <p className="player-card__model">{model}</p>}
           </div>
         )}
