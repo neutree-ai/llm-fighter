@@ -1,0 +1,8 @@
+.game-controller {
+  background: linear-gradient(180deg,
+      oklch(0.2542 0.0611 281.1423),
+      oklch(0.1649 0.0352 281.8285));
+  backdrop-filter: blur(8px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}

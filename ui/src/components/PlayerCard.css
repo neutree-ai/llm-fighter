@@ -1,0 +1,184 @@
+/* Base card styles */
+.player-card {
+  @apply relative rounded-lg overflow-hidden cursor-pointer;
+  backdrop-filter: blur(8px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Rarity variants - removed, using legendary style as default */
+
+/* Background glow */
+.player-card__glow {
+  @apply absolute inset-0 rounded-lg opacity-20;
+  background: radial-gradient(ellipse at center bottom,
+      oklch(0.95 0.15 102 / 0.6) 0%,
+      oklch(0.9168 0.1915 101.4070 / 0.3) 50%,
+      transparent 70%);
+  z-index: 1;
+}
+
+/* Floating particles - removed */
+
+/* Card content */
+.player-card__content {
+  @apply relative h-full flex flex-col p-2;
+  z-index: 2;
+}
+
+/* Image container */
+.player-card__image-container {
+  @apply flex-1 relative rounded-lg overflow-hidden;
+  background: oklch(0.1649 0.0352 281.8285 / 0.3);
+}
+
+.player-card__image {
+  @apply object-contain;
+  filter: drop-shadow(0 4px 8px oklch(0.1649 0.0352 281.8285 / 0.3));
+}
+
+.player-card__image-placeholder {
+  @apply w-full h-full flex items-center justify-center;
+  background: linear-gradient(135deg,
+      oklch(0.2542 0.0611 281.1423),
+      oklch(0.3279 0.0832 280.7890));
+}
+
+.player-card__placeholder-icon {
+  @apply text-6xl;
+  color: oklch(0.6245 0.0500 278.1046);
+}
+
+/* Player info */
+.player-card__info {
+  @apply flex flex-col gap-1 absolute bottom-2 left-4 right-4 p-1;
+  background: blur(8px);
+}
+
+.player-card__name {
+  @apply text-lg font-semibold truncate;
+  color: oklch(0.9513 0.0074 260.7315);
+  font-family: var(--font-sans);
+}
+
+.player-card__model {
+  @apply text-sm truncate;
+  color: rgba(236, 239, 244, .7);
+  font-family: var(--font-sans);
+}
+
+/* Bottom glow ring */
+.player-card__bottom-ring {
+  @apply absolute bottom-0 left-1/2 transform -translate-x-1/2;
+  width: 40%;
+  height: 2px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse,
+      oklch(0.95 0.15 102) 0%,
+      oklch(0.9168 0.1915 101.4070 / 0.8) 40%,
+      transparent 70%);
+  filter: blur(2px);
+  z-index: 1;
+}
+
+/* Corner decorations */
+.player-card__corners {
+  @apply absolute inset-0 pointer-events-none;
+  z-index: 4;
+}
+
+.player-card__corner {
+  @apply absolute w-4 h-4 border-2;
+  border-color: var(--primary);
+}
+
+.player-card__corner--tl {
+  @apply top-2 left-2;
+  border-right: none;
+  border-bottom: none;
+}
+
+.player-card__corner--tr {
+  @apply top-2 right-2;
+  border-left: none;
+  border-bottom: none;
+}
+
+.player-card__corner--bl {
+  @apply bottom-2 left-2;
+  border-right: none;
+  border-top: none;
+}
+
+.player-card__corner--br {
+  @apply bottom-2 right-2;
+  border-left: none;
+  border-top: none;
+}
+
+/* Active effects (replaces hover) */
+.player-card--active {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 32px oklch(0.95 0.15 102 / 0.3);
+}
+
+.player-card--active .player-card__glow {
+  opacity: 0.4;
+}
+
+.player-card--active .player-card__bottom-ring {
+  transform: translateY(-50%) scale(2);
+  height: 4px;
+  opacity: 1;
+}
+
+.player-card--active .player-card__particle {
+  animation-duration: 2s !important;
+}
+
+/* Glow intensity variants */
+.player-card--glow-low .player-card__glow {
+  opacity: 0.1;
+}
+
+.player-card--glow-medium .player-card__glow {
+  opacity: 0.2;
+}
+
+.player-card--glow-high .player-card__glow {
+  opacity: 0.4;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .player-card {
+    transform: none !important;
+  }
+}
+
+.player-card__image-container::before {
+  content: '';
+  @apply absolute inset-0;
+  opacity: .7;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: -1;
+}
+
+.win .player-card__image-container::before {
+  background: linear-gradient(135deg,
+      oklch(0.6513 0.1768 142.4956 / 0.8) 0%,
+      oklch(0.7654 0.1456 142.4956 / 0.6) 50%,
+      oklch(0.8421 0.1234 142.4956 / 0.4) 100%);
+}
+
+.lose .player-card__image-container::before {
+  background: linear-gradient(135deg,
+      oklch(0.5513 0.2168 29.2346 / 0.8) 0%,
+      oklch(0.6654 0.1856 29.2346 / 0.6) 50%,
+      oklch(0.7821 0.1434 29.2346 / 0.4) 100%);
+}
+
+.draw .player-card__image-container::before {
+  background: linear-gradient(135deg,
+      oklch(0.2542 0.0611 281.1423 / 0.8),
+      oklch(0.3279 0.0832 280.7890 / 0.6));
+}

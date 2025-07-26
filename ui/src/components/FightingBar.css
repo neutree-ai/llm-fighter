@@ -1,0 +1,119 @@
+/* Base container styles */
+.fighting-bar {
+  @apply relative overflow-hidden;
+  background: linear-gradient(45deg,
+      oklch(0.2542 0.0611 281.1423),
+      oklch(0.3279 0.0832 280.7890));
+  border: 3px solid oklch(0.3279 0.0832 280.7890);
+  position: relative;
+  width: 100%;
+  height: 35px;
+}
+
+/* Health bar styles */
+.fighting-bar--health.fighting-bar--left {
+  clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 100%, 20px 100%);
+  transform: skewX(-8deg);
+  box-shadow: 0 0 15px oklch(0.8442 0.1457 209.2851 / 0.3);
+}
+
+.fighting-bar--health.fighting-bar--right {
+  clip-path: polygon(20px 0, 100% 0, calc(100% - 20px) 100%, 0 100%);
+  transform: skewX(8deg);
+  box-shadow: 0 0 15px oklch(0.8442 0.1457 209.2851 / 0.3);
+}
+
+/* Energy bar styles */
+.fighting-bar--energy {
+  height: 20px;
+  width: 60%;
+}
+
+.fighting-bar--energy.fighting-bar--left {
+  clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 100%, 15px 100%);
+  transform: skewX(-18deg);
+  left: 12px;
+}
+
+.fighting-bar--energy.fighting-bar--right {
+  clip-path: polygon(15px 0, 100% 0, calc(100% - 15px) 100%, 0 100%);
+  transform: skewX(18deg);
+  right: 12px;
+}
+
+/* Fill styles */
+.fighting-bar__fill {
+  @apply h-full relative;
+  position: relative;
+}
+
+/* Health bar fill */
+.fighting-bar--health .fighting-bar__fill--left {
+  clip-path: polygon(0 0, calc(100% - 17px) 0, 100% 100%, 17px 100%);
+}
+
+.fighting-bar--health .fighting-bar__fill--right {
+  @apply float-right;
+  clip-path: polygon(17px 0, 100% 0, calc(100% - 17px) 100%, 0 100%);
+}
+
+/* Energy bar fill */
+.fighting-bar--energy .fighting-bar__fill--left {
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 100%, 12px 100%);
+}
+
+.fighting-bar--energy .fighting-bar__fill--right {
+  @apply float-right;
+  clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
+}
+
+/* Animation effects */
+.fighting-bar--animated .fighting-bar__fill {
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fighting-bar--animated.fighting-bar--health .fighting-bar__fill {
+  animation: pulse-health 2s infinite;
+}
+
+.fighting-bar--animated.fighting-bar--energy .fighting-bar__fill {
+  animation: energy-flow 1.5s infinite;
+}
+
+@keyframes pulse-health {
+
+  0%,
+  100% {
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.2);
+  }
+
+  50% {
+    box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.4);
+  }
+}
+
+@keyframes energy-flow {
+  0% {
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(2px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .fighting-bar {
+    transform: none !important;
+    clip-path: none !important;
+  }
+
+  .fighting-bar__fill {
+    clip-path: none !important;
+  }
+}

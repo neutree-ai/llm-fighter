@@ -1,0 +1,259 @@
+/* Base label styles */
+.game-label {
+  @apply relative flex items-center justify-center;
+  background: linear-gradient(145deg,
+      oklch(0.2542 0.0611 281.1423),
+      oklch(0.1649 0.0352 281.8285));
+  backdrop-filter: blur(8px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+/* Size variants */
+.game-label--small {
+  @apply px-6 py-2 text-sm rounded-md;
+  min-height: 32px;
+}
+
+.game-label--medium {
+  @apply px-8 py-3 text-base rounded-lg;
+  min-height: 44px;
+}
+
+.game-label--large {
+  @apply px-12 py-4 text-lg rounded-lg;
+  min-height: 56px;
+}
+
+.game-label--xl {
+  @apply px-16 py-6 text-2xl rounded-xl;
+  min-height: 72px;
+}
+
+/* Color variants */
+.game-label--primary .game-label__glow {
+  background: radial-gradient(ellipse at center,
+      oklch(0.6726 0.2904 341.4084 / 0.4) 0%,
+      oklch(0.9168 0.1915 101.4070 / 0.2) 50%,
+      transparent 70%);
+}
+
+.game-label--secondary .game-label__glow {
+  background: radial-gradient(ellipse at center,
+      oklch(0.8442 0.1457 209.2851 / 0.4) 0%,
+      transparent 70%);
+}
+
+.game-label--accent .game-label__glow {
+  background: radial-gradient(ellipse at center,
+      oklch(0.8903 0.1739 171.2690 / 0.4) 0%,
+      transparent 70%);
+}
+
+/* Background glow */
+.game-label__glow {
+  @apply absolute inset-0 rounded opacity-20;
+  z-index: 1;
+}
+
+/* Content */
+.game-label__content {
+  @apply relative z-10 font-semibold text-center w-full;
+  color: oklch(0.9513 0.0074 260.7315);
+  font-family: var(--font-sans);
+  text-shadow: 0 2px 4px oklch(0.1649 0.0352 281.8285 / 0.5);
+}
+
+/* Corner highlights */
+.game-label__corners {
+  @apply absolute inset-0 pointer-events-none;
+  z-index: 5;
+}
+
+.game-label__corner {
+  @apply absolute border-2;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Primary variant corners */
+.game-label--primary .game-label__corner {
+  border-color: oklch(0.6726 0.2904 341.4084);
+}
+
+/* Secondary variant corners */
+.game-label--secondary .game-label__corner {
+  border-color: oklch(0.8442 0.1457 209.2851);
+}
+
+/* Accent variant corners */
+.game-label--accent .game-label__corner {
+  border-color: oklch(0.8903 0.1739 171.2690);
+}
+
+/* Corner positioning - small */
+.game-label--small .game-label__corner {
+  width: 8px;
+  height: 8px;
+}
+
+.game-label--small .game-label__corner--tl {
+  @apply top-1 left-1;
+  border-right: none;
+  border-bottom: none;
+}
+
+.game-label--small .game-label__corner--tr {
+  @apply top-1 right-1;
+  border-left: none;
+  border-bottom: none;
+}
+
+.game-label--small .game-label__corner--bl {
+  @apply bottom-1 left-1;
+  border-right: none;
+  border-top: none;
+}
+
+.game-label--small .game-label__corner--br {
+  @apply bottom-1 right-1;
+  border-left: none;
+  border-top: none;
+}
+
+/* Corner positioning - medium */
+.game-label--medium .game-label__corner {
+  width: 10px;
+  height: 10px;
+}
+
+.game-label--medium .game-label__corner--tl {
+  @apply top-1.5 left-1.5;
+  border-right: none;
+  border-bottom: none;
+}
+
+.game-label--medium .game-label__corner--tr {
+  @apply top-1.5 right-1.5;
+  border-left: none;
+  border-bottom: none;
+}
+
+.game-label--medium .game-label__corner--bl {
+  @apply bottom-1.5 left-1.5;
+  border-right: none;
+  border-top: none;
+}
+
+.game-label--medium .game-label__corner--br {
+  @apply bottom-1.5 right-1.5;
+  border-left: none;
+  border-top: none;
+}
+
+/* Corner positioning - large */
+.game-label--large .game-label__corner {
+  width: 12px;
+  height: 12px;
+}
+
+.game-label--large .game-label__corner--tl {
+  @apply top-2 left-2;
+  border-right: none;
+  border-bottom: none;
+}
+
+.game-label--large .game-label__corner--tr {
+  @apply top-2 right-2;
+  border-left: none;
+  border-bottom: none;
+}
+
+.game-label--large .game-label__corner--bl {
+  @apply bottom-2 left-2;
+  border-right: none;
+  border-top: none;
+}
+
+.game-label--large .game-label__corner--br {
+  @apply bottom-2 right-2;
+  border-left: none;
+  border-top: none;
+}
+
+/* Corner positioning - xl */
+.game-label--xl .game-label__corner {
+  width: 16px;
+  height: 16px;
+}
+
+.game-label--xl .game-label__corner--tl {
+  @apply top-3 left-3;
+  border-right: none;
+  border-bottom: none;
+}
+
+.game-label--xl .game-label__corner--tr {
+  @apply top-3 right-3;
+  border-left: none;
+  border-bottom: none;
+}
+
+.game-label--xl .game-label__corner--bl {
+  @apply bottom-3 left-3;
+  border-right: none;
+  border-top: none;
+}
+
+.game-label--xl .game-label__corner--br {
+  @apply bottom-3 right-3;
+  border-left: none;
+  border-top: none;
+}
+
+/* Clickable behavior */
+.game-label--clickable {
+  @apply cursor-pointer;
+}
+
+.game-label--clickable:hover {
+  transform: translateY(-1px);
+}
+
+.game-label--clickable:hover .game-label__glow {
+  opacity: 0.35;
+}
+
+.game-label--clickable:hover .game-label__corner {
+  transform: scale(1.1);
+  filter: brightness(1.2);
+}
+
+.game-label--clickable:active {
+  transform: translateY(0px);
+}
+
+/* Glow intensity variants */
+.game-label--glow-low .game-label__glow {
+  opacity: 0.1;
+}
+
+.game-label--glow-medium .game-label__glow {
+  opacity: 0.2;
+}
+
+.game-label--glow-high .game-label__glow {
+  opacity: 0.4;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .game-label--xl {
+    @apply px-6 py-4 text-xl;
+    min-height: 56px;
+  }
+
+  .game-label--large {
+    @apply px-4 py-3 text-base;
+    min-height: 44px;
+  }
+}
