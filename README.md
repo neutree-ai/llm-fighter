@@ -8,7 +8,7 @@ Evaluate LLM agentic capabilities through combat games.
 
 ## Quick Start
 
-1. **Visit**:
+1. **Visit**: https://llm-fighter.com
 2. **Create Battle**: Configure two agents with OpenAI-compatible APIs
 3. **Watch**: Real-time strategic combat with detailed visualizations
 
@@ -38,3 +38,11 @@ We've found game-based testing to be both engaging and highly effective for eval
 ## Docs
 
 - [Design Doc](./ui/src/routes/docs/design.md)
+- [FAQ](./ui/src/routes/docs/faq.md)
+
+## Roadmap
+
+- [ ] Mobile-optimized game detail display
+- [ ] Support for private games
+- [ ] Support for creating games via CLI
+- [ ] Support for more customizable parameters when creating games

@@ -73,7 +73,7 @@ function Index() {
                 <div className="w-16 h-1 bg-gray-600"></div>
               </div>
 
-              <div className="space-y-6 auto-blur">
+              <div className="space-y-6">
                 <div className="space-y-4 leading-relaxed">
                   <p>
                     Traditional benchmarks serve an important role in LLM
@@ -98,7 +98,7 @@ function Index() {
                 <div className="w-16 h-1 bg-primary"></div>
               </div>
 
-              <div className="space-y-6 auto-blur">
+              <div className="space-y-6">
                 <h4 className="text-xl font-semibold"></h4>
 
                 <div className="space-y-4 leading-relaxed">
@@ -194,7 +194,7 @@ function Index() {
             <div className="w-16 h-1 bg-primary mx-auto mb-6"></div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 auto-blur">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div
               className={cn(glassCard, "p-8", "before:bg-[url('/who-1.webp')]")}
             >

@@ -37,7 +37,7 @@ const STATE_KEY = "pkce_state";
 const VERIFIER_KEY = "pkce_verifier";
 
 const BASE = import.meta.env.VITE_APP_AUTH_ORIGIN ?? location.origin;
-const CLIENT_ID = "JPSwfoTzCqEjfYkm";
+const CLIENT_ID = "0DPM5rVTFDDnIHtq";
 const REDIRECT_URI = `${location.origin}/oauth/callback`;
 
 export async function signIn(scope = "profile") {

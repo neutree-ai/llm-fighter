@@ -24,7 +24,7 @@ export default defineConfig({
     host: "0.0.0.0",
     proxy: {
       "/api": {
-        target: "https://llm-fighter.koala-club.workers.dev",
+        target: "https://llm-fighter.com",
         changeOrigin: true,
         agent: new ProxyAgent(),
       },
