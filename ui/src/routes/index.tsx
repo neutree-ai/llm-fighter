@@ -10,7 +10,7 @@ export const Route = createFileRoute("/")({
 // Glass effect CSS class
 const glassCard = [
   "group relative bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl",
-  "hover:border-gray-600/50 transition-all duration-300 hover:transform hover:scale-[1.02] hover:shadow-2xl cursor-pointer overflow-hidden",
+  "hover:border-gray-600/50 transition-all duration-300 hover:transform hover:scale-[1.02] hover:shadow-2xl overflow-hidden",
   "before:absolute before:inset-0 before:bg-cover before:bg-center before:opacity-30 before:transition-opacity before:duration-500 hover:before:opacity-50 before:-z-10 before:blur-md hover:before:blur-none",
 ].join(" ");
 
