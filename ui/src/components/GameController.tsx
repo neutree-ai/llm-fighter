@@ -58,8 +58,9 @@ const GameController = ({
   }, [mode, onNext, intervalMs]);
 
   return (
-    <div className="space-y-4 game-controller px-4 py-2 rounded-lg">
-      <div className="space-x-2 text-foreground font-electro font-bold">
+    <div className="space-y-2 md:space-y-4 game-controller px-2 md:px-4 py-1 md:py-2 rounded-lg w-full max-w-md">
+      {/* Desktop status */}
+      <div className="hidden md:block space-x-2 text-foreground font-electro font-bold">
         <span className="mr-4">
           {current.turn}/{totalTurns}
         </span>
@@ -74,32 +75,49 @@ const GameController = ({
           </span>
         )}
       </div>
-      <div className="space-x-2 flex">
-        <Button onClick={onPrev}>
-          <ArrowLeft />
-        </Button>
-        <Button
-          onClick={() =>
-            setMode((prev) => (prev === "manual" ? "auto" : "manual"))
-          }
-        >
-          {mode === "manual" ? <Play /> : <Pause />}
-        </Button>
-        {mode === "auto" && (
-          <Select value={intervalMs} onValueChange={setIntervalMs}>
-            <SelectTrigger className="w-[100px] text-foreground">
-              <SelectValue placeholder="Speed" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="1000">Fast</SelectItem>
-              <SelectItem value="3000">Medium</SelectItem>
-              <SelectItem value="5000">Slow</SelectItem>
-            </SelectContent>
-          </Select>
-        )}
-        <Button onClick={onNext}>
-          <ArrowRight />
-        </Button>
+      
+      {/* Mobile & Desktop controls */}
+      <div className="flex items-center justify-between">
+        {/* Mobile status */}
+        <div className="md:hidden text-foreground font-electro font-bold text-sm">
+          {current.turn}/{totalTurns}
+          {winner && (
+            <div className="text-xs uppercase">
+              {winner === "draw" ? "Draw" : winner === "p1" ? "P1 Wins" : "P2 Wins"}
+            </div>
+          )}
+        </div>
+        
+        {/* Control buttons */}
+        <div className="flex items-center space-x-1 md:space-x-2">
+          <Button onClick={onPrev} size="sm" className="md:h-10">
+            <ArrowLeft className="w-4 h-4" />
+          </Button>
+          <Button
+            onClick={() =>
+              setMode((prev) => (prev === "manual" ? "auto" : "manual"))
+            }
+            size="sm"
+            className="md:h-10"
+          >
+            {mode === "manual" ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}
+          </Button>
+          {mode === "auto" && (
+            <Select value={intervalMs} onValueChange={setIntervalMs}>
+              <SelectTrigger className="w-16 md:w-[100px] text-foreground h-8 md:h-10 text-xs md:text-sm">
+                <SelectValue placeholder="Speed" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="1000">Fast</SelectItem>
+                <SelectItem value="3000">Medium</SelectItem>
+                <SelectItem value="5000">Slow</SelectItem>
+              </SelectContent>
+            </Select>
+          )}
+          <Button onClick={onNext} size="sm" className="md:h-10">
+            <ArrowRight className="w-4 h-4" />
+          </Button>
+        </div>
       </div>
     </div>
   );

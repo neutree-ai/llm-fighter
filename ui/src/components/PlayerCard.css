@@ -153,6 +153,22 @@
   .player-card {
     transform: none !important;
   }
+  
+  .player-card__content {
+    @apply p-1;
+  }
+  
+  .player-card__info {
+    @apply gap-0 bottom-1 left-2 right-2 p-0;
+  }
+  
+  .player-card__name {
+    @apply text-sm;
+  }
+  
+  .player-card__model {
+    @apply text-xs;
+  }
 }
 
 .player-card__image-container::before {

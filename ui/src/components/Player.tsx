@@ -23,6 +23,7 @@ interface PlayerProps {
     turn: number;
     player: "p1" | "p2";
   };
+  mobileLayout?: boolean;
 }
 
 const Player = ({
@@ -33,6 +34,7 @@ const Player = ({
   log,
   violationRecord,
   totalToken,
+  mobileLayout = false,
 }: PlayerProps) => {
   const active = role === current.player && current.turn !== 0;
   const violationCount = useMemo(() => {
@@ -44,6 +46,106 @@ const Player = ({
   }, [violationRecord, role, current.turn]);
   const violationTurn =
     current.player !== role && role === "p2" ? current.turn - 1 : current.turn;
+
+  if (mobileLayout) {
+    return (
+      <div className={cn("player-mobile w-full max-w-sm mx-auto", className)}>
+        {/* Compact player card */}
+        <div className="mb-4">
+          <PlayerCard
+            playerName={config.name}
+            model={config.model}
+            active={active}
+            flipImage={role === "p1"}
+            width="240px"
+            height="120px"
+          />
+        </div>
+        
+        {/* Vertical layout for skills and info */}
+        <div className="space-y-3">
+          <div className="grid grid-cols-2 gap-3">
+            <GameLabel variant="secondary" size="small">
+              Current Action
+              <div className="text-center min-h-8">
+                {log ? (
+                  <SkillImg
+                    skillName={log.result.skillUsed}
+                    className="inline w-6 h-6"
+                    violationLog={violationRecord[`${role}-${violationTurn}`]}
+                  />
+                ) : (
+                  <span className="text-muted-foreground text-xs">No action</span>
+                )}
+              </div>
+            </GameLabel>
+            
+            <GameLabel size="small" variant="secondary">
+              Stats
+              <div className="text-left text-xs space-y-1">
+                <div className="flex items-center">
+                  <img src={tokenIcon} alt="Token" className="inline-block w-3 h-3" />
+                  <span className="ml-1">{totalToken}</span>
+                </div>
+                <div
+                  className={cn(
+                    "flex items-center",
+                    violationCount > 0 ? "text-red-500" : "text-green-500"
+                  )}
+                >
+                  <img
+                    src={s0}
+                    alt="Violation"
+                    className="inline-block w-3 h-3 bg-red-800 rounded-full"
+                  />
+                  <span className="ml-1">{violationCount}</span>
+                </div>
+              </div>
+            </GameLabel>
+          </div>
+          
+          <GameLabel variant="secondary" size="small">
+            Last Actions
+            <SkillsBox lastActions={log?.state.lastActions[role] ?? []} compact />
+          </GameLabel>
+          
+          <GameLabel variant="secondary" size="small">
+            Cooldowns
+            <CooldownBox
+              cooldowns={
+                log?.state[role].cooldowns ?? {
+                  [SkillName.quickStrike]: 0,
+                  [SkillName.heavyBlow]: 0,
+                  [SkillName.barrier]: 0,
+                  [SkillName.rejuvenate]: 0,
+                  [SkillName.ultimateNova]: 0,
+                  [SkillName.skipTurn]: 0,
+                }
+              }
+              compact
+            />
+          </GameLabel>
+          
+          <GameLabel variant="secondary" size="small">
+            Thinking
+            <div className="text-left h-16 space-y-1">
+              <ScrollArea className="h-full">
+                {(log?.toolCalls ?? [])
+                  .filter((call) => call.type === "thinking")
+                  .map((call, index) => {
+                    return (
+                      <div key={index} className="text-muted-foreground w-full text-xs">
+                        <ReactMarkdown>{call.content ?? ""}</ReactMarkdown>
+                      </div>
+                    );
+                  })}
+              </ScrollArea>
+            </div>
+          </GameLabel>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div

@@ -1,3 +1,25 @@
 .turn-number {
   text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
 }
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .player-mobile {
+    @apply flex flex-col items-center;
+  }
+  
+  .turn-number {
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+  }
+  
+  /* Safe area for mobile devices */
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 1rem);
+  }
+  
+  /* Ensure game controller is accessible */
+  .game-controller {
+    @apply bg-background/90 backdrop-blur-sm;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  }
+}

@@ -19,6 +19,7 @@ interface FightingBarProps {
   onAnimationEnd?: () => void;
   className?: string;
   style?: React.CSSProperties;
+  compact?: boolean;
 }
 
 const FightingBar: React.FC<FightingBarProps> = ({
@@ -38,6 +39,7 @@ const FightingBar: React.FC<FightingBarProps> = ({
   onAnimationEnd,
   className = "",
   style = {},
+  compact = false,
 }) => {
   const percentage = Math.max(0, Math.min(100, (value / maxValue) * 100));
 
@@ -76,6 +78,7 @@ const FightingBar: React.FC<FightingBarProps> = ({
         fighting-bar--${side}
         ${animated ? "fighting-bar--animated" : ""}
         ${glowEffect ? "fighting-bar--glow" : ""}
+        ${compact ? "fighting-bar--compact" : ""}
         ${className}
       `.trim()}
       style={barStyle}

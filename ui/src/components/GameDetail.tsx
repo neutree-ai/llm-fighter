@@ -194,12 +194,13 @@ export default function GameDetail({ gameResult }: GameDetailProps) {
   return (
     <div
       className={cn(
-        "p-4 h-screen flex flex-col justify-between pt-[80px]",
+        "p-4 md:h-screen md:flex md:flex-col md:justify-between pt-[80px] min-h-screen",
         `before:absolute before:inset-0 before:bg-[url('/background.webp')] before:bg-cover before:bg-center before:opacity-100 before:-z-1`
       )}
     >
       <header>
-        <div className="flex justify-between items-center">
+        {/* Desktop HP/MP bars */}
+        <div className="hidden md:flex justify-between items-center">
           <div className="space-y-1 flex flex-col items-end flex-1">
             <FightingBar type="health" side="left" value={p1HpPercent} />
             <FightingBar type="energy" side="left" value={p1MpPercent} />
@@ -212,9 +213,32 @@ export default function GameDetail({ gameResult }: GameDetailProps) {
             <FightingBar type="energy" side="right" value={p2MpPercent} />
           </div>
         </div>
+        
+        {/* Mobile HP/MP bars - ultra compact layout */}
+        <div className="md:hidden">
+          <div className="flex items-center justify-between text-sm mb-2">
+            <div className="text-foreground font-medium">{gameResult.p1Config.name}</div>
+            <div className="text-foreground font-bold turn-number font-electro">
+              Turn {current.turn.toString().padStart(2, "0")}
+            </div>
+            <div className="text-foreground font-medium">{gameResult.p2Config.name}</div>
+          </div>
+          <div className="flex items-center space-x-3">
+            <div className="flex-1 space-y-1">
+              <FightingBar type="health" side="left" value={p1HpPercent} compact />
+              <FightingBar type="energy" side="left" value={p1MpPercent} compact />
+            </div>
+            <div className="text-xs font-bold text-muted-foreground px-1">VS</div>
+            <div className="flex-1 space-y-1">
+              <FightingBar type="health" side="right" value={p2HpPercent} compact />
+              <FightingBar type="energy" side="right" value={p2MpPercent} compact />
+            </div>
+          </div>
+        </div>
       </header>
-      <main>
-        <div className="flex justify-between items-center h-full space-x-6">
+      <main className="flex-1 md:h-auto">
+        {/* Desktop layout - both players side by side */}
+        <div className="hidden md:flex justify-between items-center h-full space-x-6">
           <Player
             config={gameResult.p1Config}
             current={current}
@@ -239,8 +263,41 @@ export default function GameDetail({ gameResult }: GameDetailProps) {
             totalToken={p2Token.total}
           />
         </div>
+        
+        {/* Mobile layout - single active player */}
+        <div className="md:hidden flex justify-center py-4">
+          {current.player === "p1" || current.turn === 0 ? (
+            <Player
+              config={gameResult.p1Config}
+              current={current}
+              role="p1"
+              log={p1Log}
+              violationRecord={violationRecord}
+              totalToken={p1Token.total}
+              className={cn(
+                "mobile-player",
+                current.turn === totalTurns && getRoleState(gameResult, "p1")
+              )}
+              mobileLayout
+            />
+          ) : (
+            <Player
+              config={gameResult.p2Config}
+              className={cn(
+                "mobile-player",
+                current.turn === totalTurns && getRoleState(gameResult, "p2")
+              )}
+              current={current}
+              role="p2"
+              log={p2Log}
+              violationRecord={violationRecord}
+              totalToken={p2Token.total}
+              mobileLayout
+            />
+          )}
+        </div>
       </main>
-      <footer className="pb-4 flex items-center justify-center">
+      <footer className="pb-4 md:pb-4 pb-safe flex items-center justify-center md:relative md:bottom-auto sticky bottom-0 bg-background/80 backdrop-blur-sm border-t md:border-t-0 md:bg-transparent">
         <GameController
           current={current}
           totalTurns={totalTurns}
