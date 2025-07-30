@@ -11,6 +11,7 @@ const GameResultListItem = GameResult.pick({
   created_at: true,
   owner_id: true,
   public: true,
+  featured: true,
 });
 
 export const GameResultListSchema = {
@@ -27,6 +28,10 @@ export const GameResultListSchema = {
       model: Str({
         required: false,
         description: "Filter by model",
+      }),
+      section: Str({
+        required: false,
+        description: "Filter by section: my, featured, recent",
       }),
     }),
   },
@@ -51,8 +56,13 @@ export const GameResultListSchema = {
 
 export function createSqlWhere(
   base: string,
-  { isCompleted, model }: z.infer<typeof GameResultListSchema.request.query>,
-  params: any[]
+  {
+    isCompleted,
+    model,
+    section,
+  }: z.infer<typeof GameResultListSchema.request.query>,
+  params: any[],
+  userId?: string
 ) {
   let where = base;
 
@@ -66,7 +76,89 @@ export function createSqlWhere(
     params.push(`%${model}%`, `%${model}%`);
   }
 
+  // Handle section filtering
+  if (section === "my" && userId) {
+    where += ` AND owner_id = ?`;
+    params.push(userId);
+  } else if (section === "featured") {
+    where += ` AND public = 1 AND featured = 1`;
+  } else if (section === "recent") {
+    where += ` AND public = 1`;
+  }
+
   return where;
+}
+
+export function getSectionLimit(section?: string): number {
+  if (section === "recent") return 6;
+  if (section === "featured") return 20;
+  return 50;
+}
+
+export function parseGameResult(result: z.infer<typeof GameResult>) {
+  return {
+    id: result.id,
+    winner: result.winner,
+    p1Config: JSON.parse(result.p1Config),
+    p2Config: JSON.parse(result.p2Config),
+    gameConfig: JSON.parse(result.gameConfig),
+    created_at: result.created_at,
+    owner_id: result.owner_id,
+    public: result.public,
+    featured: result.featured,
+  };
+}
+
+export async function queryGames(
+  db: D1Database,
+  query: z.infer<typeof GameResultListSchema.request.query>,
+  userId?: string
+) {
+  const { page, section } = query;
+  const params: any[] = [];
+  const limit = getSectionLimit(section);
+
+  const where = createSqlWhere(
+    "WHERE (public = 1 OR owner_id = ?)",
+    query,
+    params,
+    userId
+  );
+
+  if (userId) {
+    params.unshift(userId);
+  }
+
+  const sql = `SELECT * FROM game_results ${where} ORDER BY created_at DESC LIMIT ${limit} OFFSET ?`;
+  params.push(page * limit);
+
+  const { results } = await db
+    .prepare(sql)
+    .bind(...params)
+    .all<z.infer<typeof GameResult>>();
+
+  return results.map(parseGameResult);
+}
+
+export async function queryPublicGames(
+  db: D1Database,
+  query: z.infer<typeof GameResultListSchema.request.query>
+) {
+  const { page, section } = query;
+  const params: any[] = [];
+  const limit = getSectionLimit(section);
+
+  const where = createSqlWhere("WHERE public = 1", query, params, undefined);
+
+  const sql = `SELECT * FROM game_results ${where} ORDER BY created_at DESC LIMIT ${limit} OFFSET ?`;
+  params.push(page * limit);
+
+  const { results } = await db
+    .prepare(sql)
+    .bind(...params)
+    .all<z.infer<typeof GameResult>>();
+
+  return results.map(parseGameResult);
 }
 
 export class GameResultList extends OpenAPIRoute {
@@ -76,35 +168,11 @@ export class GameResultList extends OpenAPIRoute {
     const data = await this.getValidatedData<typeof this.schema>();
     const props = c.executionCtx.props;
 
-    const { page } = data.query;
-
-    const params: any[] = [props.userId];
-
-    const where = createSqlWhere(
-      "WHERE (public = 1 OR owner_id = ?)",
-      data.query,
-      params
-    );
-
-    const sql = `SELECT * FROM game_results ${where} ORDER BY created_at DESC LIMIT 50 OFFSET ?`;
-
-    params.push(page * 50);
-    const { results } = await c.env.DB.prepare(sql)
-      .bind(...params)
-      .all<z.infer<typeof GameResult>>();
+    const gameResults = await queryGames(c.env.DB, data.query, props.userId);
 
     return {
       success: true,
-      gameResults: results.map((result) => ({
-        id: result.id,
-        winner: result.winner,
-        p1Config: JSON.parse(result.p1Config),
-        p2Config: JSON.parse(result.p2Config),
-        gameConfig: JSON.parse(result.gameConfig),
-        created_at: result.created_at,
-        owner_id: result.owner_id,
-        public: result.public,
-      })),
+      gameResults,
     };
   }
 }

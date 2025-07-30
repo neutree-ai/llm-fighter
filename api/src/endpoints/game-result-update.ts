@@ -18,6 +18,7 @@ export class GameResultUpdate extends OpenAPIRoute {
             schema: GameResult.omit({
               id: true,
               created_at: true,
+              featured: true,
             }),
           },
         },

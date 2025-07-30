@@ -14,6 +14,7 @@ export const GameResult = z.object({
   p1Config: Str(),
   p2Config: Str(),
   public: Bool(),
+  featured: Bool(),
   owner_id: Str().optional(),
   created_at: DateTime({
     default: true,

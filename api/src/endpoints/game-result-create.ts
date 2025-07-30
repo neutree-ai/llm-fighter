@@ -16,6 +16,7 @@ export class GameResultCreate extends OpenAPIRoute {
               id: true,
               created_at: true,
               owner_id: true,
+              featured: true,
             }),
           },
         },
@@ -58,8 +59,9 @@ export class GameResultCreate extends OpenAPIRoute {
 				p1Config,
 				p2Config,
         public,
-        owner_id
-			) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        owner_id,
+        featured
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       RETURNING id`
     )
       .bind(
@@ -72,7 +74,8 @@ export class GameResultCreate extends OpenAPIRoute {
         gameResultToCreate.p1Config,
         gameResultToCreate.p2Config,
         gameResultToCreate.public ? 1 : 0,
-        props.userId
+        props.userId,
+        0
       )
       .first();
 

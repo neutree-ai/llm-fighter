@@ -6,6 +6,7 @@ type ApiGameState = {
   id: string;
   created_at: string;
   public: boolean | null;
+  featured: boolean | null;
   owner_id: string | null;
 } & GameResult;
 
@@ -15,7 +16,7 @@ const getApiScope = (userId: string) => {
 
 export const api = {
   listGames(
-    { page, model }: { page: number; model?: string },
+    { page, model, section }: { page: number; model?: string; section?: string },
     { userId }: { userId: string }
   ): Promise<ApiGameState[]> {
     const search = new URLSearchParams();
@@ -23,6 +24,9 @@ export const api = {
     search.set("isCompleted", "true");
     if (model) {
       search.set("model", model);
+    }
+    if (section) {
+      search.set("section", section);
     }
 
     return apiFetch(

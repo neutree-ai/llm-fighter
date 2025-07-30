@@ -200,6 +200,7 @@ function RouteComponent() {
         violationLogs: [],
         tokenLogs: [],
         public: true,
+        featured: false,
       });
 
       setApiKeys(game.id, {

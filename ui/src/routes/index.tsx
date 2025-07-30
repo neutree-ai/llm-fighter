@@ -181,6 +181,19 @@ function Index() {
                     </div>
                   </div>
                 </div>
+
+                <div className="mt-6">
+                  <Button
+                    variant="link"
+                    size="sm"
+                    className="font-fighter text-sm cursor-pointer"
+                    onClick={() =>
+                      navigate({ to: "/docs/faq", resetScroll: true })
+                    }
+                  >
+                    Learn how to identify elite models →
+                  </Button>
+                </div>
               </div>
             </div>
           </div>

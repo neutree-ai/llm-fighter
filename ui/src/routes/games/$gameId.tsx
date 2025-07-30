@@ -55,6 +55,7 @@ function RouteComponent() {
         await api.updateGame(gameId, {
           ...result,
           public: gameData.data?.public ?? true,
+          featured: false,
         });
         setGameResult(result);
       },
