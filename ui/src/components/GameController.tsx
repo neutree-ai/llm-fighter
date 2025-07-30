@@ -56,6 +56,7 @@ const GameController = ({
       }
     };
   }, [mode, onNext, intervalMs]);
+  const showWinner = current.turn === totalTurns && winner;
 
   return (
     <div className="space-y-2 md:space-y-4 game-controller px-2 md:px-4 py-1 md:py-2 rounded-lg w-full max-w-md">
@@ -64,8 +65,8 @@ const GameController = ({
         <span className="mr-4">
           {current.turn}/{totalTurns}
         </span>
-        {!winner && <span className="uppercase text-sm">running</span>}
-        {winner && (
+        {!showWinner && <span className="uppercase text-sm">running</span>}
+        {showWinner && (
           <span className="uppercase text-sm">
             {winner === "draw"
               ? "draw"
@@ -75,7 +76,7 @@ const GameController = ({
           </span>
         )}
       </div>
-      
+
       {/* Mobile & Desktop controls */}
       <div className="flex items-center justify-between">
         {/* Mobile status */}
@@ -83,11 +84,15 @@ const GameController = ({
           {current.turn}/{totalTurns}
           {winner && (
             <div className="text-xs uppercase">
-              {winner === "draw" ? "Draw" : winner === "p1" ? "P1 Wins" : "P2 Wins"}
+              {winner === "draw"
+                ? "Draw"
+                : winner === "p1"
+                  ? "P1 Wins"
+                  : "P2 Wins"}
             </div>
           )}
         </div>
-        
+
         {/* Control buttons */}
         <div className="flex items-center space-x-1 md:space-x-2">
           <Button onClick={onPrev} size="sm" className="md:h-10">
@@ -100,11 +105,15 @@ const GameController = ({
             size="sm"
             className="md:h-10"
           >
-            {mode === "manual" ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}
+            {mode === "manual" ? (
+              <Play className="w-4 h-4" />
+            ) : (
+              <Pause className="w-4 h-4" />
+            )}
           </Button>
           {mode === "auto" && (
             <Select value={intervalMs} onValueChange={setIntervalMs}>
-              <SelectTrigger className="w-16 md:w-[100px] text-foreground h-8 md:h-10 text-xs md:text-sm">
+              <SelectTrigger className="w-[100px] text-foreground h-8 md:h-10 text-xs md:text-sm">
                 <SelectValue placeholder="Speed" />
               </SelectTrigger>
               <SelectContent>
