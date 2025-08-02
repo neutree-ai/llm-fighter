@@ -18,16 +18,8 @@ function RouteComponent() {
       <div className="container mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-foreground">Games</h1>
-          <Link
-            to="/games/new"
-            disabled={stableNotLogin}
-            className="w-full sm:w-auto"
-          >
-            <Button
-              variant="default"
-              disabled={stableNotLogin}
-              className="w-full sm:w-auto"
-            >
+          <Link to="/games/new" disabled={stableNotLogin}>
+            <Button variant="default" disabled={stableNotLogin}>
               <Plus />
               New
             </Button>

@@ -67,6 +67,26 @@ function RouteComponent() {
     }
   }, [gameData.data, gameId, getApiKeys]);
 
+  useEffect(() => {
+    const isGameRunning = gameData.data && !gameData.data.winner && !gameResult?.winner;
+    
+    if (!isGameRunning) {
+      return;
+    }
+
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "Game is in progress. Leaving the page will stop the game. Are you sure?";
+      return e.returnValue;
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [gameData.data, gameResult]);
+
   if (gameData.isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background text-foreground">

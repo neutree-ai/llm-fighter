@@ -57,7 +57,7 @@ type FormData = z.infer<typeof formSchema>;
 type AgentConfig = z.infer<typeof agentConfigSchema>;
 
 const defaultAgentConfig: AgentConfig = {
-  baseURL: "https://openrouter.ai/api/v1",
+  baseURL: "",
   apiKey: "",
   name: "",
   model: "",
