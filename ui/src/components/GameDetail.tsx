@@ -5,6 +5,9 @@ import { useCallback, useMemo, useState } from "react";
 import { type ViolationLog } from "@/lib/game/engine";
 import GameController from "./GameController";
 import { cn } from "@/lib/utils";
+import { exportGameAsYAML } from "@/lib/game/yaml-export";
+import { Download } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface GameDetailProps {
   gameResult: GameResult;
@@ -191,6 +194,20 @@ export default function GameDetail({ gameResult }: GameDetailProps) {
     });
   }, [totalTurns, p1Logs.length, p2Logs.length]);
 
+  const handleExportYAML = useCallback(() => {
+    const yamlContent = exportGameAsYAML(gameResult);
+    const blob = new Blob([yamlContent], { type: "text/yaml" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `battle-${gameResult.p1Config.name}-vs-${gameResult.p2Config.name}-${new Date().toISOString().split("T")[0]}.yaml`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, [gameResult]);
+
   return (
     <div
       className={cn(
@@ -213,25 +230,51 @@ export default function GameDetail({ gameResult }: GameDetailProps) {
             <FightingBar type="energy" side="right" value={p2MpPercent} />
           </div>
         </div>
-        
+
         {/* Mobile HP/MP bars - ultra compact layout */}
         <div className="md:hidden">
           <div className="flex items-center justify-between text-sm mb-2">
-            <div className="text-foreground font-medium">{gameResult.p1Config.name}</div>
+            <div className="text-foreground font-medium">
+              {gameResult.p1Config.name}
+            </div>
             <div className="text-foreground font-bold turn-number font-electro">
               Turn {current.turn.toString().padStart(2, "0")}
             </div>
-            <div className="text-foreground font-medium">{gameResult.p2Config.name}</div>
+            <div className="text-foreground font-medium">
+              {gameResult.p2Config.name}
+            </div>
           </div>
           <div className="flex items-center space-x-3">
             <div className="flex-1 space-y-1">
-              <FightingBar type="health" side="left" value={p1HpPercent} compact />
-              <FightingBar type="energy" side="left" value={p1MpPercent} compact />
+              <FightingBar
+                type="health"
+                side="left"
+                value={p1HpPercent}
+                compact
+              />
+              <FightingBar
+                type="energy"
+                side="left"
+                value={p1MpPercent}
+                compact
+              />
             </div>
-            <div className="text-xs font-bold text-muted-foreground px-1">VS</div>
+            <div className="text-xs font-bold text-muted-foreground px-1">
+              VS
+            </div>
             <div className="flex-1 space-y-1">
-              <FightingBar type="health" side="right" value={p2HpPercent} compact />
-              <FightingBar type="energy" side="right" value={p2MpPercent} compact />
+              <FightingBar
+                type="health"
+                side="right"
+                value={p2HpPercent}
+                compact
+              />
+              <FightingBar
+                type="energy"
+                side="right"
+                value={p2MpPercent}
+                compact
+              />
             </div>
           </div>
         </div>
@@ -263,7 +306,7 @@ export default function GameDetail({ gameResult }: GameDetailProps) {
             totalToken={p2Token.total}
           />
         </div>
-        
+
         {/* Mobile layout - single active player */}
         <div className="md:hidden flex justify-center py-4">
           {current.player === "p1" || current.turn === 0 ? (
@@ -297,14 +340,31 @@ export default function GameDetail({ gameResult }: GameDetailProps) {
           )}
         </div>
       </main>
-      <footer className="pb-4 md:pb-4 pb-safe flex items-center justify-center md:relative md:bottom-auto sticky bottom-0 bg-background/80 backdrop-blur-sm border-t md:border-t-0 md:bg-transparent">
-        <GameController
-          current={current}
-          totalTurns={totalTurns}
-          onNext={handleNext}
-          onPrev={handlePrev}
-          winner={gameResult.winner}
-        />
+      <footer className="pb-4 md:pb-4 pb-safe flex items-center justify-between md:relative md:bottom-auto sticky bottom-0 bg-background/80 backdrop-blur-sm border-t md:border-t-0 md:bg-transparent">
+        <div className="flex-1 flex justify-start">
+          {/* eslint-disable-next-line no-constant-binary-expression */}
+          {false && (
+            <Button
+              onClick={handleExportYAML}
+              title="Export battle timeline as YAML for LLM analysis"
+            >
+              <Download className="w-4 h-4" />
+              <span className="hidden sm:inline">Export YAML</span>
+            </Button>
+          )}
+        </div>
+
+        <div className="flex justify-center">
+          <GameController
+            current={current}
+            totalTurns={totalTurns}
+            onNext={handleNext}
+            onPrev={handlePrev}
+            winner={gameResult.winner}
+          />
+        </div>
+
+        <div className="flex-1"></div>
       </footer>
     </div>
   );
